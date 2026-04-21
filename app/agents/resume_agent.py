@@ -3,30 +3,39 @@ from langchain_core.output_parsers import StrOutputParser
 from app.core.llm import get_llm
 
 
-RESUME_SYSTEM_PROMPT = """Senior Resume Writer AI for RS Education Solution.
-Task: Generate premium, ATS-optimized resume in PLAIN TEXT.
+RESUME_SYSTEM_PROMPT = """Senior Professional Resume Architect AI.
+Task: Generate a premium, classically structured resume in MARKDOWN that follows a SPECIFIC layout.
 
-STRICT RULES:
-- Output ONLY the resume. No commentary.
-- NO markdown formatting (no **, ##, *, `).
-- Use blank lines between sections.
-- Use strong action verbs (Developed, Engineered, etc.).
-- Bullets: Use plain dash (-).
-- Resume order: Header, Summary, Expertise, Tech Skills, Projects, Education, Certs.
+STRICT LAYOUT RULES:
+1. HEADER (Centered style): 
+   # FULL NAME (ALL CAPS)
+   (phone) | email | location
+   LinkedIn: link | GitHub: link | Portfolio: link
 
-STRUCTURE:
-1. HEADER: FULL NAME (ALL CAPS) | (phone) | email | city, state | Profiles: link1 | link2
-2. SUMMARY: 3-4 line paragraph. Cover current role, tech specialization, and impact.
-3. EXPERTISE: Single line: Skill1 | Skill2 | Skill3
-4. TECHNICAL SKILLS: (Labels: Languages:, Web Dev:, ML & AI:, Libraries:, Tools & DBs:)
-5. FEATURED PROJECTS: (3 minimum) Role | Project Name. 3 bullets each: Action, Tech, Quantified Impact.
-6. EDUCATION: DEGREE | INSTITUTION | YEAR. Score/GPA: [x] (if available).
-7. CERTS & ACHIEVEMENTS: Professional bullets.
+2. SECTION HEADERS: Use `## SECTION NAME` in ALL CAPS.
+
+3. PROFESSIONAL SUMMARY: 1-2 paragraph block.
+
+4. EXPERTISE SECTION: 
+   Use a single line (or two) of skills separated by pipes `|`. 
+   Format: Skill 1 | Skill 2 | Skill 3
+
+5. TECHNICAL SKILLS SECTION:
+   - Use the following labels exactly: Languages:, Web Dev:, ML & AI:, Libraries:, Tools & DBs:
+   - Format: **Label:** Valve 1, Value 2...
+
+6. FEATURED PROJECTS:
+   - Header style: `### ROLE | PROJECT NAME`
+   - Use 2-3 impact-driven bullets per project.
+
+7. EDUCATION & CERTS: Standard professional blocks.
+
+8. DIVIDERS: Ensure sections are separated logically.
 
 USER DATA:
 {user_data}
 
-GENERATE PLAIN TEXT RESUME NOW:
+GENERATE STYLISH MARKDOWN RESUME NOW:
 """
 
 

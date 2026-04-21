@@ -81,18 +81,18 @@ def serialize_input(data: ResumeInput) -> str:
 
 def clean_output(raw: str) -> str:
     """
-    Post-processes the LLM output to ensure consistent plain-text formatting.
-    Removes markdown artifacts, normalizes spacing, and trims whitespace.
+    Post-processes the LLM output to ensure consistent formatting.
+    Normalizes spacing and trims whitespace, while preserving Markdown structure.
     """
-    # Strip markdown bold/italic/heading markers
-    for marker in ["**", "__", "##", "###", "# ", "* ", "` "]:
-        raw = raw.replace(marker, "")
-
-    # Normalize multiple consecutive blank lines to a single blank line
     import re
+    
+    # Remove common AI-generated preamble/postamble if any (though prompt forbids it)
+    # Just in case, trim everything before the first '#' and after the last content
+    
+    # Normalize multiple consecutive blank lines to a single blank line
     raw = re.sub(r"\n{3,}", "\n\n", raw)
 
-    # Strip leading/trailing whitespace per line while preserving structure
+    # Strip trailing whitespace per line
     cleaned_lines = [line.rstrip() for line in raw.splitlines()]
 
     return "\n".join(cleaned_lines).strip()

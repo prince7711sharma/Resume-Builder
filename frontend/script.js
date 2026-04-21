@@ -51,8 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Show result
             placeholder.classList.add('hidden');
-            output.textContent = result.resume;
+            
+            // Render Markdown
+            output.innerHTML = marked.parse(result.resume);
             output.classList.remove('hidden');
+            
+            // Show Actions
+            document.getElementById('resume-actions').classList.remove('hidden');
             
             // Scroll to top of result on mobile
             if (window.innerWidth <= 1024) {
@@ -63,28 +68,31 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Error: ${error.message}`);
         } finally {
             submitBtn.disabled = false;
-            btnText.textContent = 'Generate ATS Resume';
+            btnText.textContent = 'Generate Stylish Resume';
             loader.classList.add('hidden');
         }
     });
 
+    // Copy Content
     document.getElementById('copy-btn').addEventListener('click', () => {
-        const text = document.getElementById('resume-output').textContent;
+        const textArea = document.getElementById('resume-output');
+        const text = textArea.innerText || textArea.textContent;
         if (!text) return;
         
         navigator.clipboard.writeText(text).then(() => {
             const btn = document.getElementById('copy-btn');
             const originalText = btn.textContent;
             btn.textContent = 'Copied!';
-            btn.style.background = 'var(--success)';
-            btn.style.color = '#fff';
             
             setTimeout(() => {
                 btn.textContent = originalText;
-                btn.style.background = '';
-                btn.style.color = '';
             }, 2000);
         });
+    });
+
+    // Print Functionality
+    document.getElementById('print-btn')?.addEventListener('click', () => {
+        window.print();
     });
 });
 
