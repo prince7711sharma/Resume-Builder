@@ -33,6 +33,15 @@ def create_application() -> FastAPI:
     # ── Routers ────────────────────────────────────────────────────────────────
     app.include_router(resume_router)
 
+    # ── Startup Check ────────────────────────────────────────────────────────
+    @app.on_event("startup")
+    async def startup_event():
+        print(f"--- STARTING {settings.APP_NAME} ---")
+        if not settings.GROQ_API_KEY or settings.GROQ_API_KEY == "your_key_here":
+            print("CRITICAL: GROQ_API_KEY is missing or invalid!")
+        else:
+            print("INFO: GROQ_API_KEY detected.")
+
     # ── Health Check ───────────────────────────────────────────────────────────
     @app.get("/", tags=["Health"], summary="Health check")
     async def root():
