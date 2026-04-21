@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     APP_NAME: str = Field(default="RS Education Solution - Resume Builder")
     APP_VERSION: str = Field(default="1.0.0")
     DEBUG: bool = Field(default=False)
-    GROQ_API_KEY: str = Field(..., env="GROQ_API_KEY")
+    GROQ_API_KEY: str = Field(default="missing", env="GROQ_API_KEY")
     # After (current production model)
     # Using 8B as primary for speed and higher rate limits
     GROQ_MODEL: str = Field(default="llama-3.1-8b-instant")
