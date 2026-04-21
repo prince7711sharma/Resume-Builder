@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+langchain
+langchain-groq
+langchain-core
+pydantic
+pydantic-settings
+python-dotenv
+slowapi
+tenacity

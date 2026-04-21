@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="clay-card header">
+            <h1>AI Resume Builder</h1>
+            <p>Generate an ATS-optimized resume using AI</p>
+        </header>
+
+        <main class="main-content">
+            <form id="resume-form" class="clay-card form-container">
+                <!-- Personal Info -->
+                <section class="form-section">
+                    <h2>Personal Information</h2>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" class="clay-input" required placeholder="Priya Sharma">
+                        </div>
+                        <div class="input-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" class="clay-input" required placeholder="priya@email.com">
+                        </div>
+                        <div class="input-group">
+                            <label for="phone">Phone *</label>
+                            <input type="text" id="phone" name="phone" class="clay-input" required placeholder="+91 9876543210">
+                        </div>
+                        <div class="input-group">
+                            <label for="location">Location *</label>
+                            <input type="text" id="location" name="location" class="clay-input" required placeholder="Mumbai, Maharashtra">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Summary -->
+                <section class="form-section">
+                    <h2>Summary</h2>
+                    <div class="input-group">
+                        <label for="summary">Professional Summary (Optional)</label>
+                        <textarea id="summary" name="summary" class="clay-input resize-y" rows="3" placeholder="Leave blank to let AI generate one basis your profile..."></textarea>
+                    </div>
+                </section>
+
+                <!-- Technical Skills -->
+                <section class="form-section">
+                    <h2>Technical Skills</h2>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="languages">Languages</label>
+                            <input type="text" id="languages" name="languages" class="clay-input" placeholder="Python, JavaScript, Java">
+                        </div>
+                        <div class="input-group">
+                            <label for="web_dev">Web Development</label>
+                            <input type="text" id="web_dev" name="web_dev" class="clay-input" placeholder="React, Node.js, FastAPI">
+                        </div>
+                        <div class="input-group">
+                            <label for="ml_ai">ML / AI</label>
+                            <input type="text" id="ml_ai" name="ml_ai" class="clay-input" placeholder="TensorFlow, PyTorch, LangChain">
+                        </div>
+                        <div class="input-group">
+                            <label for="libraries">Libraries</label>
+                            <input type="text" id="libraries" name="libraries" class="clay-input" placeholder="Pandas, NumPy, Matplotlib">
+                        </div>
+                        <div class="input-group col-span-2">
+                            <label for="tools_dbs">Tools & Databases</label>
+                            <input type="text" id="tools_dbs" name="tools_dbs" class="clay-input" placeholder="Git, Docker, PostgreSQL, MongoDB">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dynamic Sections -->
+                
+                <!-- Profiles -->
+                <section class="form-section dynamic-section">
+                    <div class="section-header">
+                        <h2>Social Profiles</h2>
+                        <button type="button" class="clay-btn btn-small" onclick="addProfile()">+ Add Profile</button>
+                    </div>
+                    <div id="profiles-container"></div>
+                </section>
+
+                <!-- Education -->
+                <section class="form-section dynamic-section">
+                    <div class="section-header">
+                        <h2>Education *</h2>
+                        <button type="button" class="clay-btn btn-small" onclick="addEducation()">+ Add Education</button>
+                    </div>
+                    <div id="education-container"></div>
+                </section>
+
+                <!-- Projects -->
+                <section class="form-section dynamic-section">
+                    <div class="section-header">
+                        <h2>Projects / Experience *</h2>
+                        <button type="button" class="clay-btn btn-small" onclick="addProject()">+ Add Project</button>
+                    </div>
+                    <div id="projects-container"></div>
+                </section>
+
+                <!-- Certifications -->
+                <section class="form-section dynamic-section">
+                    <div class="section-header">
+                        <h2>Certifications</h2>
+                        <button type="button" class="clay-btn btn-small" onclick="addCertification()">+ Add Certification</button>
+                    </div>
+                    <div id="certifications-container"></div>
+                </section>
+
+                <div class="form-actions">
+                    <button type="submit" class="clay-btn btn-primary" id="submit-btn">
+                        <span class="btn-text">Generate ATS Resume</span>
+                        <div class="loader hidden"></div>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Result Area -->
+            <div id="result-container" class="clay-card hidden">
+                <div class="result-header">
+                    <h2>Generated Resume</h2>
+                    <button id="copy-btn" class="clay-btn btn-small">Copy Text</button>
+                </div>
+                <pre id="resume-output" class="clay-area"></pre>
+            </div>
+        </main>
+    </div>
+
+    <!-- Templates for dynamic items -->
+    <template id="profile-template">
+        <div class="dynamic-item clay-inner">
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Platform *</label>
+                    <input type="text" name="profile_platform[]" class="clay-input" required placeholder="LinkedIn, GitHub...">
+                </div>
+                <div class="input-group">
+                    <label>Link *</label>
+                    <input type="url" name="profile_link[]" class="clay-input" required placeholder="https://...">
+                </div>
+            </div>
+            <button type="button" class="clay-btn btn-danger btn-icon" onclick="this.closest('.dynamic-item').remove()">×</button>
+        </div>
+    </template>
+
+    <template id="education-template">
+        <div class="dynamic-item clay-inner">
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Degree *</label>
+                    <input type="text" name="edu_degree[]" class="clay-input" required placeholder="B.Tech Computer Science">
+                </div>
+                <div class="input-group">
+                    <label>Institution *</label>
+                    <input type="text" name="edu_institution[]" class="clay-input" required placeholder="IIT Bombay">
+                </div>
+                <div class="input-group">
+                    <label>Year *</label>
+                    <input type="text" name="edu_year[]" class="clay-input" required placeholder="2025">
+                </div>
+                <div class="input-group">
+                    <label>Score (Optional)</label>
+                    <input type="text" name="edu_score[]" class="clay-input" placeholder="8.7 CGPA">
+                </div>
+            </div>
+            <button type="button" class="clay-btn btn-danger btn-icon" onclick="this.closest('.dynamic-item').remove()">×</button>
+        </div>
+    </template>
+
+    <template id="project-template">
+        <div class="dynamic-item clay-inner">
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Role *</label>
+                    <input type="text" name="proj_role[]" class="clay-input" required placeholder="Full Stack Developer">
+                </div>
+                <div class="input-group">
+                    <label>Project Name *</label>
+                    <input type="text" name="proj_name[]" class="clay-input" required placeholder="AI Chatbot">
+                </div>
+                <div class="input-group col-span-2">
+                    <label>Tech Stack *</label>
+                    <input type="text" name="proj_tech_stack[]" class="clay-input" required placeholder="Python, FastAPI, React">
+                </div>
+                <div class="input-group col-span-2">
+                    <label>Description *</label>
+                    <textarea name="proj_description[]" class="clay-input resize-y" rows="2" required placeholder="Built a chatbot using LangChain..."></textarea>
+                </div>
+                <div class="input-group col-span-2">
+                    <label>Impact / Results (Optional)</label>
+                    <input type="text" name="proj_impact[]" class="clay-input" placeholder="Reduced support tickets by 40%">
+                </div>
+            </div>
+            <button type="button" class="clay-btn btn-danger btn-icon" onclick="this.closest('.dynamic-item').remove()">×</button>
+        </div>
+    </template>
+
+    <template id="certification-template">
+        <div class="dynamic-item clay-inner">
+            <div class="input-group flex-1">
+                <label>Certification / Detail *</label>
+                <input type="text" name="cert_detail[]" class="clay-input" required placeholder="AWS Cloud Practitioner 2024">
+            </div>
+            <button type="button" class="clay-btn btn-danger btn-icon mt-auto" onclick="this.closest('.dynamic-item').remove()">×</button>
+        </div>
+    </template>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
